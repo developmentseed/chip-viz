@@ -1,0 +1,19 @@
+{
+  "name": "chip-viz",
+  "version": "1.0.0",
+  "description": "Visualize Quadkey based Chip inferences on a slippy map",
+  "bin": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@mapbox/mbtiles": "^0.11.0",
+    "@mapbox/tilebelt": "^1.0.1",
+    "@turf/turf": "^5.1.6",
+    "csv": "^5.3.1",
+    "express": "^4.17.1",
+    "minimist": "^1.2.0",
+    "object-assign": "^4.1.1",
+    "parallel-transform": "^1.2.0",
+    "split": "^1.0.1"
+  }
+}
