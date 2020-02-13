@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const os = require('os');
 const fs = require('fs');
 const turf = require('@turf/turf');
 const path = require('path');
@@ -27,17 +28,16 @@ if (args.token) {
     token = args.token;
 }
 
+if (!args.tiles) {
+    args.tiles = path.resolve(os.tmpdir(), 'chip_viz.mbtiles');
+}
+
 if (!args._[2] || args.help) {
     console.error();
     console.error('Visualize Tile Based ML data');
     console.error();
     console.error('Usage: ./index.js <inferences.csv> [--tiles <file>] [--inferences <a,b,...>');
     console.error('           [--token <Mapbox API Token>] [--help]');
-    console.error();
-    process.exit();
-} else if (!args.tiles) {
-    console.error();
-    console.error('  --tiles arg must be specified');
     console.error();
     process.exit();
 } else if (!args.inferences) {

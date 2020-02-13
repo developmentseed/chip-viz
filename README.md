@@ -6,8 +6,13 @@ Visualize Quadkey based Chip inferences on a slippy map
 
 ```
 ./index.js input.csv \
-    --tiles output.mbtiles \
     --inferences "baseball,soccer,pool"
+```
+
+For more information:
+
+```
+./index.js --help
 ```
 
 ### Inference Format
