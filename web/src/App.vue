@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div class='h-full'>
         <div id='map' class='w-full h-full'></div>
 
         <div class='absolute z5 w180 bg-white round px12 py12' style='bottom: 40px; left: 12px;'>
@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import turf from '@turf/turf';
+import buffer from '../node_modules/@turf/buffer/index.js';
+import bboxPolygon from '../node_modules/@turf/bbox-polygon/index.js';
 
 export default {
     name: 'chip-viz',
@@ -75,19 +76,19 @@ export default {
     watch: {
         raw: function() {
             for (const inf of this.inferences) {
-                this.map.setlayoutproperty(`inf-${inf}`, 'visibility', 'none');
-                this.map.setlayoutproperty(`inf-${inf}-raw`, 'visibility', 'none');
+                this.map.setLayoutProperty(`inf-${inf}`, 'visibility', 'none');
+                this.map.setLayoutProperty(`inf-${inf}-raw`, 'visibility', 'none');
             }
 
-            this.map.setlayoutproperty(`inf-${this.layer}${this.raw ? '-raw' : ''}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`inf-${this.layer}${this.raw ? '-raw' : ''}`, 'visibility', 'visible');
         },
         layer: function() {
             for (const inf of this.inferences) {
-                this.map.setlayoutproperty(`inf-${inf}`, 'visibility', 'none');
-                this.map.setlayoutproperty(`inf-${inf}-raw`, 'visibility', 'none');
+                this.map.setLayoutProperty(`inf-${inf}`, 'visibility', 'none');
+                this.map.setLayoutProperty(`inf-${inf}-raw`, 'visibility', 'none');
             }
 
-            this.map.setlayoutproperty(`inf-${this.layer}${this.raw ? '-raw' : ''}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`inf-${this.layer}${this.raw ? '-raw' : ''}`, 'visibility', 'visible');
         },
     },
     mounted: function() {
@@ -102,7 +103,7 @@ export default {
             }
 
             if (res.token) {
-                mapboxgl.accesstoken = res.token;
+                mapboxgl.accessToken = res.token;
                 mapsettings.style = 'mapbox://styles/mapbox/satellite-streets-v11'
             }
 
@@ -110,17 +111,17 @@ export default {
             this.bounds = res.bounds;
             this.layer = this.inferences[0];
 
-            this.map = new mapboxgl.map(mapsettings);
-            this.map.addcontrol(new mapboxgl.navigationcontrol());
+            this.map = new mapboxgl.Map(mapsettings);
+            this.map.addControl(new mapboxgl.NavigationControl());
 
-            const polyouter = turf.buffer(turf.bboxpolygon(this.bounds), 0.3);
-            const polyinner = turf.buffer(turf.bboxpolygon(this.bounds), 0.1);
+            const polyouter = buffer(bboxPolygon(this.bounds), 0.3);
+            const polyinner = buffer(bboxPolygon(this.bounds), 0.1);
 
             const poly = {
-                type: 'feature',
+                type: 'Feature',
                 properties: {},
                 geometry: {
-                    type: 'polygon',
+                    type: 'Polygon',
                     coordinates: [
                         polyouter.geometry.coordinates[0],
                         polyinner.geometry.coordinates[0]
@@ -131,12 +132,12 @@ export default {
             this.map.on('load', () => {
                 this.bboxzoom();
 
-                this.map.addsource('bbox', {
+                this.map.addSource('bbox', {
                     type: 'geojson',
                     data: poly
                 });
 
-                this.map.addlayer({
+                this.map.addLayer({
                     'id': `bbox-layer`,
                     'type': 'fill',
                     'source': 'bbox',
@@ -146,7 +147,7 @@ export default {
                     }
                 });
 
-                this.map.addsource('inference', {
+                this.map.addSource('inference', {
                     'type': 'vector',
                     'tiles': [
                         'http://localhost:1234/api/tiles/{z}/{x}/{y}.mvt'
@@ -156,7 +157,7 @@ export default {
                 });
 
                 for (const inf of this.inferences) {
-                    this.map.addlayer({
+                    this.map.addLayer({
                         'id': `inf-${inf}`,
                         'type': 'fill',
                         'source': 'inference',
@@ -173,7 +174,7 @@ export default {
                         }
                     });
 
-                    this.map.addlayer({
+                    this.map.addLayer({
                         'id': `inf-${inf}-raw`,
                         'type': 'fill',
                         'source': 'inference',
@@ -192,37 +193,37 @@ export default {
 
                     this.map.on('mousemove', `inf-${inf}`, (e) => {
                         if (!e.features.length > 0|| !e.features[0].properties[`${this.raw ? 'raw:' : ''}${this.layer}`]) {
-                            this.map.getcanvas().style.cursor = '';
+                            this.map.getCanvas().style.cursor = '';
                             this.inspect = false;
                             return;
                         }
 
-                        this.map.getcanvas().style.cursor = 'pointer';
+                        this.map.getCanvas().style.cursor = 'pointer';
 
                         this.inspect = e.features[0].properties[`raw:${this.layer}`];
                     });
 
                     this.map.on('mousemove', `inf-${inf}-raw`, (e) => {
                         if (!e.features.length > 0|| !e.features[0].properties[`${this.raw ? 'raw:' : ''}${this.layer}`]) {
-                            this.map.getcanvas().style.cursor = '';
+                            this.map.getCanvas().style.cursor = '';
                             this.inspect = false;
                             return;
                         }
 
-                        this.map.getcanvas().style.cursor = 'pointer';
+                        this.map.getCanvas().style.cursor = 'pointer';
 
                         this.inspect = e.features[0].properties[`raw:${this.layer}`];
                     });
                 }
 
-                this.map.setlayoutproperty(`inf-${this.inferences[0]}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`inf-${this.inferences[0]}`, 'visibility', 'visible');
             });
         }).catch((err) => {
             alert(err.message);
         });
     },
     methods: {
-        bboxZoom: function() {
+        bboxzoom: function() {
             this.map.fitBounds([
                 [this.bounds[0], this.bounds[1]],
                 [this.bounds[2], this.bounds[3]]

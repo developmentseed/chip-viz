@@ -22,7 +22,7 @@ const args = require('minimist')(process.argv, {
 let token = process.env.MAPBOX_ACCESS_TOKEN;
 
 const app = express();
-app.use('/', express.static(path.resolve(__dirname, 'web/')));
+app.use('/', express.static(path.resolve(__dirname, 'web/dist/')));
 
 if (args.token) {
     token = args.token;
