@@ -1,3 +1,7 @@
+# Custom
+*.csv
+*.mbtiles
+
 # Logs
 logs
 *.log
