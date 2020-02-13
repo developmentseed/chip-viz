@@ -14,3 +14,8 @@ RUN apt-get update -y \
     && cp ./node-v13.8.0-linux-x64/bin/node /usr/bin/ \
     && ./node-v13.8.0-linux-x64/bin/npm install -g npm \
     && npm install -g yarn
+
+WORKDIR /usr/local/src/chip-viz
+ADD . /usr/local/src/chip-viz
+
+RUN yarn install
