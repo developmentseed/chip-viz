@@ -44,15 +44,36 @@
             <div class='col col--12 clearfix py12'>
                 <button @click='bboxzoom' class='btn round btn--stroke fl btn--gray'><svg class='icon'><use xlink:href='#icon-viewport'/></svg></button>
             </div>
-            <div class='grid grid--gut12 col col--12'>
-                <div class='col col--2'>
-                    <label class='switch-container'>
-                        <input v-model='raw' type='checkbox' />
-                        <div class='switch'></div>
-                    </label>
+
+            <template v-if='!advanced'>
+                <div class='col col--12'>
+                    <button @click='advanced = !advanced' class='btn btn--white color-gray px0'><svg class='icon fl my6'><use xlink:href='#icon-chevron-right'/></svg><span class='fl pl6'>Advanced Options</span></button>
                 </div>
-                <div class='col col--10 pl24'>Raw Values</div>
-            </div>
+            </template>
+            <template v-else>
+                <div class='col col--12 border-b border--gray-light mb12'>
+                    <button @click='advanced = !advanced' class='btn btn--white color-gray px0'><svg class='icon fl my6'><use xlink:href='#icon-chevron-down'/></svg><span class='fl pl6'>Advanced Options</span></button>
+                </div>
+            </template>
+
+            <template v-if='advanced'>
+                <div class='grid grid--gut12 col col--12'>
+                    <div class='col col--2'>
+                        <label class='switch-container'>
+                            <input v-model='raw' type='checkbox' />
+                            <div class='switch'></div>
+                        </label>
+                    </div>
+                    <div class='col col--10 pl24'>Raw Values</div>
+                </div>
+
+                <div class='none col col--12'>
+                    <label>Opacity</label>
+                    <div class='range range--s color-gray'>
+                        <input type='range' />
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -68,6 +89,8 @@ export default {
             raw: false,
             layer: '',
             inspect: false,
+            advanced: false,
+            opacity: 0.5,
             map: false,
             inferences: [],
             bounds: false
@@ -169,7 +192,7 @@ export default {
                             'fill-color': '#ff0000',
                             'fill-opacity': [
                                 "number",
-                                [ '*', ["get", inf], 0.5]
+                                [ '*', ["get", inf], this.opacity]
                             ]
                         }
                     });

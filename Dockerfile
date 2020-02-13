@@ -22,3 +22,5 @@ RUN yarn install \
     && cd web/ \
     && yarn install \
     && yarn build \
+
+CMD ./index.js
