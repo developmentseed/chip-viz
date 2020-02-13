@@ -1,6 +1,7 @@
 # Custom
 *.csv
 *.mbtiles
+dist/
 
 # Logs
 logs

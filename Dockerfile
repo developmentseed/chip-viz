@@ -18,4 +18,7 @@ RUN apt-get update -y \
 WORKDIR /usr/local/src/chip-viz
 ADD . /usr/local/src/chip-viz
 
-RUN yarn install
+RUN yarn install \
+    && cd web/ \
+    && yarn install \
+    && yarn build \
