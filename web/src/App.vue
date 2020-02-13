@@ -11,7 +11,7 @@
                 </div>
                 <div class='flex-parent flex-parent--center-main'>
                     <div class='flex-child'>
-                        <span v-text='this.layer'></span>: <span v-text='(this.inspect * 100).tofixed(1)'></span>%
+                        <span v-text='this.layer'></span>: <span v-text='(this.inspect * 100).toFixed(1)'></span>%
                     </div>
                 </div>
             </template>
@@ -23,7 +23,7 @@
                 </div>
                 <div class='flex-parent flex-parent--center-main'>
                     <div class='flex-child'>
-                        <div align=center>hover for details</div>
+                        <div align=center>Hover for Details</div>
                     </div>
                 </div>
             </template>
@@ -31,7 +31,7 @@
 
         <div class='absolute z5 w180 bg-white round px12 py12' style='top: 12px; left: 12px;'>
             <div class='col col--12'>
-                <label>inference type</label>
+                <label>Inference Type</label>
                 <div class='select-container'>
                     <select v-model='layer' class='select'>
                         <template v-for='inf in inferences'>
@@ -51,7 +51,7 @@
                         <div class='switch'></div>
                     </label>
                 </div>
-                <div class='col col--10 pl24'>raw values</div>
+                <div class='col col--10 pl24'>Raw Values</div>
             </div>
         </div>
     </div>
@@ -192,6 +192,7 @@ export default {
                     });
 
                     this.map.on('mousemove', `inf-${inf}`, (e) => {
+                        console.error(e.features[0]);
                         if (!e.features.length > 0|| !e.features[0].properties[`${this.raw ? 'raw:' : ''}${this.layer}`]) {
                             this.map.getCanvas().style.cursor = '';
                             this.inspect = false;
