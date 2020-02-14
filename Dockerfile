@@ -21,6 +21,6 @@ ADD . /usr/local/src/chip-viz
 RUN yarn install \
     && cd web/ \
     && yarn install \
-    && yarn build \
+    && yarn build
 
 CMD ./index.js
