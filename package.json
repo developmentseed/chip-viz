@@ -11,7 +11,7 @@
     "@turf/turf": "^5.1.6",
     "csv": "^5.3.1",
     "express": "^4.17.1",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "object-assign": "^4.1.1",
     "parallel-transform": "^1.2.0",
     "split": "^1.0.1"
